@@ -74,11 +74,11 @@ imagenet_df = load_imagenet_classes()
 
 # Título da aplicação
 st.title('Classificador de Objetos em Imagens')
-
+st.write(' Elaborado por Rennan Alves, Rodrigo Medeiros e Guilherme Silva. ')
 # Descrição sobre o que é um classificador de objetos
 st.write("""
-    Este aplicativo permite carregar uma imagem para identificar objetos presentes nela. O modelo de classificação tenta
-    identificar as classes mais prováveis e exibir as probabilidades de cada classe.
+    Este classificador foi desenvolvidor para uma experiencia de imersão com uma rede neural para classificar objetos.
+    O modelo de classificação tenta identificar as classes mais prováveis e exibir as probabilidades de cada classe.
     Ao carregar uma imagem, o modelo tentará identificar o objeto presente nela, mostrando o nome da classe e a probabilidade de acerto.
     Além disso, você poderá ver as **estatísticas de acurácia** do modelo e as **top 5 classes** mais próximas identificadas.
 """)
