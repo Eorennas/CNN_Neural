@@ -113,9 +113,6 @@ elif tabs == "Estatísticas de Acurácia":
         "Isso significa que o modelo é capaz de classificar corretamente cerca de 71.8% das imagens em um grande conjunto de categorias.")
     st.write("Esse número é uma média e pode variar dependendo da categoria ou do tipo de imagem.")
 
-    st.subheader("Acurácia por classe:")
-    st.write(
-        "Infelizmente, não temos dados específicos de acurácia por classe aqui, mas você pode consultar o desempenho do modelo em tarefas específicas de classificação.")
 
 # Seção de Classes Mais Próximas
 elif tabs == "Classes Mais Próximas":
