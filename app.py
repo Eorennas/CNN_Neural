@@ -6,31 +6,31 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import requests
 
-# Carregar um modelo pré-treinado para identificação de objetos
+
 model = tf.keras.applications.MobileNetV2(weights='imagenet')
 
-# Função para preparar a imagem antes de passar para o modelo
+
 def prepare_image(image):
-    print(f'Imagem original: {image}')  # Imprimindo o tipo e tamanho da imagem
-    image = image.resize((224, 224))  # Redimensiona para 224x224
-    print(f'Imagem redimensionada: {image.size}')  # Imprimindo o tamanho após redimensionamento
-    image = np.array(image)  # Converte a imagem para um array numpy
-    print(f'Imagem como array: {image.shape}')  # Imprimindo as dimensões do array
-    image = tf.keras.applications.mobilenet_v2.preprocess_input(image)  # Pré-processamento
-    print(f'Imagem preprocessada: {image.shape}')  # Verificando após o pré-processamento
-    image = np.expand_dims(image, axis=0)  # Adiciona uma dimensão extra para o batch
+    print(f'Imagem original: {image}')  
+    image = image.resize((224, 224)) 
+    print(f'Imagem redimensionada: {image.size}')  
+    image = np.array(image)  
+    print(f'Imagem como array: {image.shape}')  
+    image = tf.keras.applications.mobilenet_v2.preprocess_input(image) 
+    print(f'Imagem preprocessada: {image.shape}')
+    image = np.expand_dims(image, axis=0) 
     return image
 
-# Função para classificar a imagem
+
 def predict_image(image):
     prepared_image = prepare_image(image)
-    print(f'Imagem preparada para predição: {prepared_image.shape}')  # Verificando a imagem preparada
+    print(f'Imagem preparada para predição: {prepared_image.shape}')  
     predictions = model.predict(prepared_image)
-    print(f'Previsões: {predictions}')  # Mostrando as previsões brutas
-    decoded_predictions = tf.keras.applications.mobilenet_v2.decode_predictions(predictions, top=5)[0]  # Top 5 previsões
+    print(f'Previsões: {predictions}')
+    decoded_predictions = tf.keras.applications.mobilenet_v2.decode_predictions(predictions, top=5)[0] 
     return decoded_predictions
 
-# Função para exibir estatísticas
+
 def display_statistics(predictions):
     st.header("Estatísticas de Acurácia e Classes Identificadas")
 
@@ -38,12 +38,12 @@ def display_statistics(predictions):
     for i, pred in enumerate(predictions):
         st.write(f"{i + 1}. {pred[1]} com probabilidade de {pred[2] * 100:.2f}%")
 
-    # Exemplo de acurácia fictícia (pode ser substituído por dados reais de acurácia de teste do modelo)
+  
     st.subheader("Acurácia do Modelo:")
     st.write(
         "A acurácia geral do modelo em tarefas de classificação é aproximadamente 71.8% (valores podem variar dependendo da classe).")
 
-    # Gerando gráfico das probabilidades
+   
     labels = [pred[1] for pred in predictions]
     probabilities = [pred[2] for pred in predictions]
 
@@ -54,14 +54,14 @@ def display_statistics(predictions):
     plt.tight_layout()
     st.pyplot(fig)
 
-# Função para carregar todas as classes do ImageNet
+
 def load_imagenet_classes():
     imagenet_classes = {}
     url = "https://storage.googleapis.com/download.tensorflow.org/data/imagenet_class_index.json"
     response = requests.get(url)
     imagenet_classes = response.json()
 
-    # Convertendo em um DataFrame para facilitar visualização
+   
     class_data = {
         "Classe ID": [key for key in imagenet_classes],
         "Classe": [value[1] for value in imagenet_classes.values()],
@@ -69,13 +69,13 @@ def load_imagenet_classes():
     }
     return pd.DataFrame(class_data)
 
-# Carregando todas as classes do ImageNet
+
 imagenet_df = load_imagenet_classes()
 
-# Título da aplicação
+
 st.title('Classificador de Objetos em Imagens')
 st.write(' Elaborado por Rennan Alves, Rodrigo Medeiros e Guilherme Silva. ')
-# Descrição sobre o que é um classificador de objetos
+
 st.write("""
     Este classificador foi desenvolvidor para uma experiencia de imersão com uma rede neural para classificar objetos.
     O modelo de classificação tenta identificar as classes mais prováveis e exibir as probabilidades de cada classe.
@@ -83,29 +83,28 @@ st.write("""
     Além disso, você poderá ver as **estatísticas de acurácia** do modelo e as **top 5 classes** mais próximas identificadas.
 """)
 
-# Criação de abas para o usuário
-tabs = st.radio("Escolha uma seção:", ("Identificação de Objeto", "Estatísticas de Acurácia", "Classes Mais Próximas", "Tabela de Classes"))
 
-# Seção de Identificação de Objeto
+tabs = st.radio("Escolha uma seção:", ("Identificação de Objeto", "Estatísticas de Acurácia", "Tabela de Classes"))
+
+
 if tabs == "Identificação de Objeto":
     st.write("Carregue uma imagem para que o modelo identifique o objeto presente nela.")
 
-    # Upload da imagem
+   
     uploaded_image = st.file_uploader("Escolha uma imagem", type=["jpg", "png", "jpeg"])
 
     if uploaded_image is not None:
-        # Exibe a imagem carregada com o parâmetro atualizado
+       
         image = Image.open(uploaded_image)
         st.image(image, caption="Imagem carregada", use_container_width=True)
 
-        # Realiza a predição
         result = predict_image(image)
 
-        # Exibe o resultado da predição
+      
         st.write(f"Identificado: {result[0][1]} com uma probabilidade de {result[0][2] * 100:.2f}%")
         display_statistics(result)
 
-# Exibe as estatísticas de acurácia e as top 5 classes
+
 elif tabs == "Estatísticas de Acurácia":
     st.header("Acurácia do Modelo")
     st.write("A acurácia do modelo em tarefas de classificação é aproximadamente 71.8%.")
